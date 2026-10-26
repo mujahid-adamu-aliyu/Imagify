@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imagify — Transform Your Images In Seconds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="landing-body">
+  <!-- Navbar -->
+  <header class="landing-header">
+    <div class="landing-nav-container">
+      <a href="index.html" class="logo">
+        <i class="ph-bold ph-sparkle"></i>
+        <span>Imagify</span>
+      </a>
+      <div class="nav-actions">
+        <button type="button" class="btn btn-secondary" id="navLoginBtn">Login</button>
+        <button type="button" class="btn btn-primary" id="navSignupBtn">Sign Up</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero-section">
+      <div class="container hero-content">
+        <h1 class="hero-title">Transform Your Images In Seconds</h1>
+        <p class="hero-subtext">Free, forever. No installs. No uploads to servers. Your images stay on your device.</p>
+        <div class="hero-buttons">
+          <button type="button" class="btn btn-primary btn-lg" id="heroGetStartedBtn">Get Started Free</button>
+          <a href="#tools" class="btn btn-secondary btn-lg">See Tools &darr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools Grid -->
+    <section class="tools-section" id="tools">
+      <div class="container">
+        <div class="section-header">
+          <h2>All 8 Free Tools</h2>
+          <p>Everything runs client-side right inside your browser.</p>
+        </div>
+        <div class="tools-grid">
+          <div class="tool-card" data-tool="compressor">
+            <div class="tool-icon"><i class="ph-duotone ph-file-zip"></i></div>
+            <h3>Compress</h3>
+            <p>Shrink file size without losing quality</p>
+          </div>
+          <div class="tool-card" data-tool="resizer">
+            <div class="tool-icon"><i class="ph-duotone ph-arrows-out-cardinal"></i></div>
+            <h3>Resize</h3>
+            <p>Custom dimensions or social media presets</p>
+          </div>
+          <div class="tool-card" data-tool="converter">
+            <div class="tool-icon"><i class="ph-duotone ph-arrows-clockwise"></i></div>
+            <h3>Convert</h3>
+            <p>PNG, JPG, and WebP in one click</p>
+          </div>
+          <div class="tool-card" data-tool="cropper">
+            <div class="tool-icon"><i class="ph-duotone ph-crop"></i></div>
+            <h3>Crop</h3>
+            <p>Precise crop with aspect ratio lock</p>
+          </div>
+          <div class="tool-card" data-tool="watermark">
+            <div class="tool-icon"><i class="ph-duotone ph-drop"></i></div>
+            <h3>Watermark</h3>
+            <p>Add text overlays with opacity control</p>
+          </div>
+          <div class="tool-card" data-tool="brightness">
+            <div class="tool-icon"><i class="ph-duotone ph-sun"></i></div>
+            <h3>Brightness</h3>
+            <p>Adjust brightness and contrast live</p>
+          </div>
+          <div class="tool-card" data-tool="base64">
+            <div class="tool-icon"><i class="ph-duotone ph-code"></i></div>
+            <h3>Base64</h3>
+            <p>Convert any image to a Base64 string</p>
+          </div>
+          <div class="tool-card" data-tool="bg-remover">
+            <div class="tool-icon"><i class="ph-duotone ph-magic-wand"></i></div>
+            <h3>Remove BG</h3>
+            <p>AI-powered background removal, free</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-section">
+      <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-badge">1</div>
+            <div class="step-icon"><i class="ph-duotone ph-upload-simple"></i></div>
+            <h3>Upload</h3>
+            <p>Drag and drop or click to browse</p>
+          </div>
+          <div class="step-card">
+            <div class="step-badge">2</div>
+            <div class="step-icon"><i class="ph-duotone ph-paint-brush"></i></div>
+            <h3>Edit</h3>
+            <p>Use any of our 8 powerful tools</p>
+          </div>
+          <div class="step-card">
+            <div class="step-badge">3</div>
+            <div class="step-icon"><i class="ph-duotone ph-download-simple"></i></div>
+            <h3>Download</h3>
+            <p>Save locally or to your account</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="container footer-content">
+      <p class="footer-left"><i class="ph-bold ph-sparkle"></i> Imagify &mdash; Free image tools, forever.</p>
+      <p class="footer-right">&copy; 2026 Imagify</p>
+    </div>
+  </footer>
+
+  <!-- Auth Overlay & Container (Modal on Desktop, Bottom Sheet on Mobile) -->
+  <div class="auth-overlay" id="authOverlay" aria-hidden="true">
+    <div class="auth-container" id="authContainer" role="dialog" aria-modal="true">
+      <div class="sheet-drag-handle" aria-hidden="true"></div>
+      <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">
+        <i class="ph-bold ph-x"></i>
+      </button>
+
+      <!-- Login Form View -->
+      <div class="auth-view" id="loginView">
+        <div class="auth-header">
+          <h2>Welcome back!</h2>
+          <p>Sign in to your Imagify account</p>
+        </div>
+        <button type="button" class="btn btn-google" id="loginGoogleBtn">
+          <i class="ph-bold ph-google-logo"></i>
+          <span>Continue with Google</span>
+        </button>
+        <div class="auth-divider"><span>or</span></div>
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="you@domain.com" required autocomplete="email">
+            <span class="inline-error" id="loginEmailError"></span>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+              <button type="button" class="btn-toggle-pw" tabindex="-1" aria-label="Toggle password visibility">
+                <i class="ph-bold ph-eye"></i>
+              </button>
+            </div>
+            <span class="inline-error" id="loginPasswordError"></span>
+          </div>
+          <div class="auth-meta">
+            <button type="button" class="btn-link" id="toResetBtn">Forgot password?</button>
+          </div>
+          <div class="form-alert" id="loginAlert"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">
+            <span class="btn-text">Login</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+          <p class="auth-switch">
+            No account? <button type="button" class="btn-link" id="toSignupBtn">Sign up &rarr;</button>
+          </p>
+        </form>
+      </div>
+
+      <!-- Signup Form View -->
+      <div class="auth-view" id="signupView" style="display: none;">
+        <div class="auth-header">
+          <h2>Create your account</h2>
+          <p>Free forever. No credit card needed.</p>
+        </div>
+        <button type="button" class="btn btn-google" id="signupGoogleBtn">
+          <i class="ph-bold ph-google-logo"></i>
+          <span>Continue with Google</span>
+        </button>
+        <div class="auth-divider"><span>or</span></div>
+        <form id="signupForm" novalidate>
+          <div class="form-group">
+            <label for="signupFullName">Full Name</label>
+            <input type="text" id="signupFullName" placeholder="Alex Morgan" required autocomplete="name">
+            <span class="inline-error" id="signupFullNameError"></span>
+          </div>
+          <div class="form-group">
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" placeholder="you@domain.com" required autocomplete="email">
+            <span class="inline-error" id="signupEmailError"></span>
+          </div>
+          <div class="form-group">
+            <label for="signupPassword">Password</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="signupPassword" placeholder="Minimum 8 characters" required autocomplete="new-password">
+              <button type="button" class="btn-toggle-pw" tabindex="-1" aria-label="Toggle password visibility">
+                <i class="ph-bold ph-eye"></i>
+              </button>
+            </div>
+            <span class="inline-error" id="signupPasswordError"></span>
+          </div>
+          <div class="form-group">
+            <label for="signupConfirmPassword">Confirm Password</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required autocomplete="new-password">
+              <button type="button" class="btn-toggle-pw" tabindex="-1" aria-label="Toggle password visibility">
+                <i class="ph-bold ph-eye"></i>
+              </button>
+            </div>
+            <span class="inline-error" id="signupConfirmPasswordError"></span>
+          </div>
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="signupTerms" required>
+              <span>I agree to the <a href="#" class="btn-link">Terms of Service</a> and <a href="#" class="btn-link">Privacy Policy</a></span>
+            </label>
+            <span class="inline-error" id="signupTermsError"></span>
+          </div>
+          <div class="form-alert" id="signupAlert"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="signupSubmitBtn">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+          <p class="auth-switch">
+            Already have an account? <button type="button" class="btn-link" id="toLoginFromSignupBtn">Login &rarr;</button>
+          </p>
+        </form>
+      </div>
+
+      <!-- Reset Password Form View -->
+      <div class="auth-view" id="resetView" style="display: none;">
+        <div class="auth-header">
+          <h2>Reset your password</h2>
+          <p>We'll send a reset link to your email</p>
+        </div>
+        <form id="resetForm" novalidate>
+          <div class="form-group">
+            <label for="resetEmail">Email</label>
+            <input type="email" id="resetEmail" placeholder="you@domain.com" required autocomplete="email">
+            <span class="inline-error" id="resetEmailError"></span>
+          </div>
+          <div class="form-alert" id="resetAlert"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="resetSubmitBtn">
+            <span class="btn-text">Send Reset Link</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+          <p class="auth-switch">
+            <button type="button" class="btn-link" id="toLoginFromResetBtn">&larr; Back to login</button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
