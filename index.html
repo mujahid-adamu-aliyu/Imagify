@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imagify — Transform Your Images In Seconds</title>
+  <meta name="description" content="Free browser-based image editor. Compress, resize, crop, convert, watermark, adjust brightness, extract Base64 & remove backgrounds with AI — no installs, no uploads, no cost." />
+  <link rel="stylesheet" href="app.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>" />
+</head>
+<body>
+
+<!-- ================================================================
+     LANDING PAGE
+     ================================================================ -->
+<div class="landing-page" id="landingPage">
+
+  <!-- Navbar -->
+  <nav class="landing-navbar">
+    <div class="landing-logo">
+      <span class="landing-logo-icon">✨</span>
+      Imagify
+    </div>
+    <div class="landing-nav-actions">
+      <button class="btn btn-secondary btn-sm" onclick="openAuth('login')">Login</button>
+      <button class="btn btn-primary btn-sm" onclick="openAuth('signup')">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="landing-hero">
+    <div class="hero-eyebrow">
+      <span>⚡</span> Free forever — no credit card needed
+    </div>
+    <h1>Transform Your Images<br /><em>In Seconds</em></h1>
+    <p>Free, forever. No installs. No uploads to servers. Your images stay on your device — all processing happens right in your browser.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary btn-lg" onclick="openAuth('signup')">Get Started Free</button>
+      <button class="btn btn-secondary btn-lg" onclick="document.getElementById('toolsSection').scrollIntoView({behavior:'smooth'})">See Tools ↓</button>
+    </div>
+    <div class="hero-trust">
+      <div class="hero-trust-item">
+        <span>✅</span>
+        <span>100% in your browser</span>
+      </div>
+      <div class="hero-trust-item">
+        <span>✅</span>
+        <span>No image uploads</span>
+      </div>
+      <div class="hero-trust-item">
+        <span>✅</span>
+        <span>8 powerful tools</span>
+      </div>
+      <div class="hero-trust-item">
+        <span>✅</span>
+        <span>No account needed to try</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools Grid -->
+  <section class="landing-tools" id="toolsSection">
+    <div class="section-header">
+      <h2>Everything You Need</h2>
+      <p>Eight professional tools, all free, all running in your browser</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card" onclick="openAuth('signup')">
+        <div class="tool-card-icon">🗜️</div>
+        <div class="tool-card-title">Compress</div>
+        <p class="tool-card-desc">Shrink file size without losing quality</p>
+      </div>
+      <div class="tool-card" onclick="openAuth('signup')">
+        <div class="tool-card-icon">📐</div>
+        <div class="tool-card-title">Resize</div>
+        <p class="tool-card-desc">Custom dimensions or social media presets</p>
+      </div>
+      <div class="tool-card" onclick="openAuth('signup')">
+        <div class="tool-card-icon">🔄</div>
+        <div class="tool-card-title">Convert</div>
+        <p class="tool-card-desc">PNG, JPG, and WebP in one click</p>
+      </div>
+      <div class="tool-card" onclick="openAuth('signup')">
+        <div class="tool-card-icon">✂️</div>
+        <div class="tool-card-title">Crop</div>
+        <p class="tool-card-desc">Precise crop with aspect ratio lock</p>
+      </div>
+      <div class="tool-card" onclick="openAuth('signup')">
+        <div class="tool-card-icon">💧</div>
+        <div class="tool-card-title">Watermark</div>
+        <p class="tool-card-desc">Add text overlays with opacity control</p>
+      </div>
+      <div class="tool-card" onclick="openAuth('signup')">
+        <div class="tool-card-icon">☀️</div>
+        <div class="tool-card-title">Brightness</div>
+        <p class="tool-card-desc">Adjust brightness and contrast live</p>
+      </div>
+      <div class="tool-card" onclick="openAuth('signup')">
+        <div class="tool-card-icon">🔡</div>
+        <div class="tool-card-title">Base64</div>
+        <p class="tool-card-desc">Convert any image to a Base64 string</p>
+      </div>
+      <div class="tool-card" onclick="openAuth('signup')">
+        <div class="tool-card-icon">🤖</div>
+        <div class="tool-card-title">Remove BG</div>
+        <p class="tool-card-desc">AI-powered background removal, free</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="landing-steps">
+    <div class="section-header">
+      <h2>How It Works</h2>
+      <p>Three steps between you and a perfect image</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">📤</div>
+        <h3>Upload</h3>
+        <p>Drag and drop or click to browse. Any image format works.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">🎨</div>
+        <h3>Edit</h3>
+        <p>Use any of our 8 powerful tools. Adjust and preview in real time.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">⬇️</div>
+        <h3>Download</h3>
+        <p>Save locally to your device or to your Imagify account.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-brand">✨ Imagify — Free image tools, forever.</div>
+    <div class="footer-copy">© 2026 Imagify</div>
+  </footer>
+
+</div><!-- /landing-page -->
+
+
+<!-- ================================================================
+     AUTH OVERLAY (Modal on desktop, Bottom sheet on mobile)
+     ================================================================ -->
+<div class="auth-overlay" id="authOverlay" onclick="handleOverlayClick(event)">
+  <div class="auth-container" id="authContainer">
+    <div class="auth-container-inner">
+
+      <!-- Drag handle (shown on mobile only) -->
+      <div class="sheet-drag-handle"></div>
+
+      <!-- Close button -->
+      <button class="auth-close-btn" onclick="closeAuth()" aria-label="Close">✕</button>
+
+      <!-- ── LOGIN VIEW ── -->
+      <div class="auth-view active" id="viewLogin">
+        <div class="auth-header">
+          <h2>Welcome back!</h2>
+          <p>Sign in to your Imagify account</p>
+        </div>
+        <div class="auth-form">
+          <button class="btn btn-google" onclick="handleGoogleSignIn()">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </button>
+          <div class="form-divider">or</div>
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email</label>
+            <input class="form-input" type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" />
+            <span class="form-error" id="loginEmailError"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password" />
+              <span class="input-toggle-btn" onclick="togglePassword('loginPassword', this)" aria-label="Show password">👁️</span>
+            </div>
+            <span class="form-error" id="loginPasswordError"></span>
+          </div>
+          <div id="loginAlert"></div>
+          <button class="btn btn-primary btn-full" id="loginBtn" onclick="handleLogin()">
+            Login
+          </button>
+          <div class="auth-footer-links">
+            <a href="#" onclick="showAuthView('reset'); return false;">Forgot password?</a>
+          </div>
+          <div class="auth-footer-links">
+            No account? <a href="#" onclick="showAuthView('signup'); return false;">Sign up →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SIGNUP VIEW ── -->
+      <div class="auth-view" id="viewSignup">
+        <div class="auth-header">
+          <h2>Create your account</h2>
+          <p>Free forever. No credit card needed.</p>
+        </div>
+        <div class="auth-form">
+          <button class="btn btn-google" onclick="handleGoogleSignIn()">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </button>
+          <div class="form-divider">or</div>
+          <div class="form-group">
+            <label class="form-label" for="signupName">Full Name</label>
+            <input class="form-input" type="text" id="signupName" placeholder="John Doe" autocomplete="name" oninput="clearError('signupNameError', this)" />
+            <span class="form-error" id="signupNameError"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">Email</label>
+            <input class="form-input" type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" oninput="clearError('signupEmailError', this)" />
+            <span class="form-error" id="signupEmailError"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signupPassword">Password</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="password" id="signupPassword" placeholder="Min. 8 characters" autocomplete="new-password" oninput="clearError('signupPasswordError', this)" />
+              <span class="input-toggle-btn" onclick="togglePassword('signupPassword', this)" aria-label="Show password">👁️</span>
+            </div>
+            <span class="form-error" id="signupPasswordError"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signupConfirm">Confirm Password</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="password" id="signupConfirm" placeholder="Repeat your password" autocomplete="new-password" oninput="clearError('signupConfirmError', this)" />
+              <span class="input-toggle-btn" onclick="togglePassword('signupConfirm', this)" aria-label="Show password">👁️</span>
+            </div>
+            <span class="form-error" id="signupConfirmError"></span>
+          </div>
+          <label class="checkbox-group">
+            <input type="checkbox" id="signupTerms" onchange="clearError('signupTermsError', this)" />
+            <span class="checkbox-label">
+              I agree to the <a href="#" onclick="return false;">Terms of Service</a> and <a href="#" onclick="return false;">Privacy Policy</a>
+            </span>
+          </label>
+          <span class="form-error" id="signupTermsError"></span>
+          <div id="signupAlert"></div>
+          <button class="btn btn-primary btn-full" id="signupBtn" onclick="handleSignup()">
+            Create Account
+          </button>
+          <div class="auth-footer-links">
+            Already have an account? <a href="#" onclick="showAuthView('login'); return false;">Login →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RESET PASSWORD VIEW ── -->
+      <div class="auth-view" id="viewReset">
+        <div class="auth-header">
+          <h2>Reset your password</h2>
+          <p>We'll send a reset link to your email</p>
+        </div>
+        <div class="auth-form">
+          <div class="form-group">
+            <label class="form-label" for="resetEmail">Email</label>
+            <input class="form-input" type="email" id="resetEmail" placeholder="you@example.com" autocomplete="email" oninput="clearError('resetEmailError', this)" />
+            <span class="form-error" id="resetEmailError"></span>
+          </div>
+          <div id="resetAlert"></div>
+          <button class="btn btn-primary btn-full" id="resetBtn" onclick="handleReset()">
+            Send Reset Link
+          </button>
+          <div class="auth-footer-links">
+            <a href="#" onclick="showAuthView('login'); return false;">← Back to login</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /auth-container-inner -->
+  </div><!-- /auth-container -->
+</div><!-- /auth-overlay -->
+
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
