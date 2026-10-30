@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Imageify — Edit. Convert. Create. All Free.</title>
+  <meta name="description" content="Imageify is a free, browser-based image toolkit. Compress, resize, crop, convert and more — no installation, no server, your images never leave your device." />
+
+  <!-- Poppins Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       DESKTOP LAYOUT (shown above 768px)
+  ═══════════════════════════════════════════ -->
+  <div class="desktop-layout">
+
+    <!-- ── LEFT: Auth Panel ── -->
+    <aside class="auth-panel" id="authPanel" aria-label="Authentication">
+      <div class="auth-panel__inner">
+
+        <!-- Logo -->
+        <a href="#" class="auth-logo" aria-label="Imageify home">
+          <span class="auth-logo__icon"><i class="ph-fill ph-image-square"></i></span>
+          <span class="auth-logo__wordmark">Imageify</span>
+        </a>
+
+        <!-- Auth Card -->
+        <div class="auth-card card" role="main">
+
+          <!-- Tab Toggle -->
+          <div class="auth-tabs" role="tablist" aria-label="Authentication options">
+            <button
+              class="auth-tab auth-tab--active"
+              id="tab-signin"
+              role="tab"
+              aria-selected="true"
+              aria-controls="form-signin"
+              data-tab="signin"
+            >Sign In</button>
+            <button
+              class="auth-tab"
+              id="tab-signup"
+              role="tab"
+              aria-selected="false"
+              aria-controls="form-signup"
+              data-tab="signup"
+            >Sign Up</button>
+          </div>
+
+          <!-- ── SIGN IN FORM ── -->
+          <div class="auth-form" id="form-signin" role="tabpanel" aria-labelledby="tab-signin">
+            <div class="form-group">
+              <label class="form-label" for="signin-email">Email</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="ph ph-envelope"></i></span>
+                <input
+                  type="email"
+                  id="signin-email"
+                  class="input-field input-field--icon"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  aria-required="true"
+                />
+              </div>
+              <span class="field-error" id="signin-email-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="signin-password">Password</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="ph ph-lock"></i></span>
+                <input
+                  type="password"
+                  id="signin-password"
+                  class="input-field input-field--icon input-field--icon-right"
+                  placeholder="Your password"
+                  autocomplete="current-password"
+                  aria-required="true"
+                />
+                <button type="button" class="input-toggle-visibility" onclick="togglePasswordVisibility('signin-password', this)" aria-label="Toggle password visibility">
+                  <i class="ph ph-eye"></i>
+                </button>
+              </div>
+              <span class="field-error" id="signin-password-error" role="alert"></span>
+            </div>
+
+            <div class="form-row form-row--right">
+              <button type="button" class="btn-link" id="forgotPasswordBtn" onclick="showAuthState('forgot')">Forgot Password?</button>
+            </div>
+
+            <button type="button" class="btn-primary btn--full" id="signinBtn" onclick="handleSignIn()">
+              <span class="btn-text">Sign In</span>
+              <span class="btn-spinner spinner" aria-hidden="true"></span>
+            </button>
+
+            <div class="divider"><span>or</span></div>
+
+            <button type="button" class="btn-google btn--full" id="signinGoogleBtn" onclick="signInWithGoogle()">
+              <span class="google-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+                  <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+                  <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+                  <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                </svg>
+              </span>
+              Continue with Google
+            </button>
+
+            <p class="auth-switch">Don't have an account? <button type="button" class="btn-link" onclick="showAuthState('signup')">Sign up</button></p>
+          </div>
+
+          <!-- ── SIGN UP FORM ── -->
+          <div class="auth-form auth-form--hidden" id="form-signup" role="tabpanel" aria-labelledby="tab-signup">
+            <div class="form-group">
+              <label class="form-label" for="signup-name">Full Name</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="ph ph-user"></i></span>
+                <input
+                  type="text"
+                  id="signup-name"
+                  class="input-field input-field--icon"
+                  placeholder="Mujahid Aliyu"
+                  autocomplete="name"
+                  aria-required="true"
+                />
+              </div>
+              <span class="field-error" id="signup-name-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="signup-email">Email</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="ph ph-envelope"></i></span>
+                <input
+                  type="email"
+                  id="signup-email"
+                  class="input-field input-field--icon"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  aria-required="true"
+                />
+              </div>
+              <span class="field-error" id="signup-email-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="signup-password">Password</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="ph ph-lock"></i></span>
+                <input
+                  type="password"
+                  id="signup-password"
+                  class="input-field input-field--icon input-field--icon-right"
+                  placeholder="At least 8 characters"
+                  autocomplete="new-password"
+                  aria-required="true"
+                />
+                <button type="button" class="input-toggle-visibility" onclick="togglePasswordVisibility('signup-password', this)" aria-label="Toggle password visibility">
+                  <i class="ph ph-eye"></i>
+                </button>
+              </div>
+              <span class="field-error" id="signup-password-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="signup-confirm">Confirm Password</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="ph ph-lock-key"></i></span>
+                <input
+                  type="password"
+                  id="signup-confirm"
+                  class="input-field input-field--icon input-field--icon-right"
+                  placeholder="Repeat your password"
+                  autocomplete="new-password"
+                  aria-required="true"
+                />
+                <button type="button" class="input-toggle-visibility" onclick="togglePasswordVisibility('signup-confirm', this)" aria-label="Toggle password visibility">
+                  <i class="ph ph-eye"></i>
+                </button>
+              </div>
+              <span class="field-error" id="signup-confirm-error" role="alert"></span>
+            </div>
+
+            <button type="button" class="btn-primary btn--full" id="signupBtn" onclick="handleSignUp()">
+              <span class="btn-text">Create Account</span>
+              <span class="btn-spinner spinner" aria-hidden="true"></span>
+            </button>
+
+            <div class="divider"><span>or</span></div>
+
+            <button type="button" class="btn-google btn--full" id="signupGoogleBtn" onclick="signInWithGoogle()">
+              <span class="google-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+                  <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+                  <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+                  <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                </svg>
+              </span>
+              Continue with Google
+            </button>
+
+            <p class="auth-switch">Already have an account? <button type="button" class="btn-link" onclick="showAuthState('signin')">Sign in</button></p>
+          </div>
+
+          <!-- ── FORGOT PASSWORD FORM ── -->
+          <div class="auth-form auth-form--hidden" id="form-forgot">
+            <button type="button" class="btn-back" onclick="showAuthState('signin')" aria-label="Back to sign in">
+              <i class="ph ph-arrow-left"></i> Back to Sign In
+            </button>
+
+            <!-- Default forgot state -->
+            <div id="forgot-default">
+              <p class="auth-description">Enter your email and we'll send you a reset link.</p>
+
+              <div class="form-group">
+                <label class="form-label" for="forgot-email">Email</label>
+                <div class="input-wrapper">
+                  <span class="input-icon"><i class="ph ph-envelope"></i></span>
+                  <input
+                    type="email"
+                    id="forgot-email"
+                    class="input-field input-field--icon"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    aria-required="true"
+                  />
+                </div>
+                <span class="field-error" id="forgot-email-error" role="alert"></span>
+              </div>
+
+              <button type="button" class="btn-primary btn--full" id="resetBtn" onclick="handlePasswordReset()">
+                <span class="btn-text">Send Reset Link</span>
+                <span class="btn-spinner spinner" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <!-- Success state -->
+            <div id="forgot-success" class="forgot-success auth-form--hidden">
+              <div class="success-icon" aria-hidden="true"><i class="ph-fill ph-check-circle"></i></div>
+              <h3 class="success-title">Check your email!</h3>
+              <p class="success-body">We sent a password reset link to your inbox. Check your spam folder if you don't see it.</p>
+              <button type="button" class="btn-secondary btn--full" onclick="showAuthState('signin')">Back to Sign In</button>
+            </div>
+          </div>
+
+        </div><!-- /auth-card -->
+
+        <!-- Guest mode -->
+        <div class="guest-link">
+          <button type="button" class="btn-guest" onclick="continueAsGuest()">
+            Continue without account <i class="ph ph-arrow-right"></i>
+          </button>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- ── RIGHT: Landing Page ── -->
+    <main class="landing-panel" id="landingPanel">
+
+      <!-- Floating Island (Desktop) -->
+      <nav class="island" id="islandDesktop" aria-label="Main navigation">
+        <a href="#" class="island-logo" aria-label="Imageify home">
+          <span class="island-logo__icon"><i class="ph-fill ph-image-square"></i></span>
+          <span class="island-logo__wordmark">Imageify</span>
+        </a>
+        <ul class="island-nav" role="list">
+          <li><a href="#about" class="island-link">About</a></li>
+          <li><a href="#features" class="island-link">Features</a></li>
+          <li><a href="#tools" class="island-link">Tools</a></li>
+          <li><a href="#how-it-works" class="island-link">How It Works</a></li>
+        </ul>
+      </nav>
+
+      <!-- Hero Section -->
+      <section class="hero" id="hero" aria-label="Hero">
+        <div class="hero__content">
+          <div class="hero__badge badge">
+            <i class="ph ph-lightning"></i> Free forever. No catch.
+          </div>
+          <h1 class="hero__headline">Edit. Convert.<br/>Create. <em>All Free.</em></h1>
+          <p class="hero__sub">
+            Imageify is a free, browser-based image toolkit built by
+            <strong>Mujahid Adamu Aliyu</strong> — a developer from Bauchi State, Nigeria,
+            who believes powerful tools should cost nothing.
+          </p>
+          <div class="hero__cta">
+            <button type="button" class="btn-primary" onclick="openAuth('signup')">Get Started Free <i class="ph ph-arrow-right"></i></button>
+          </div>
+          <p class="hero__micro">
+            <i class="ph ph-shield-check"></i> No installation. No server. Your images never leave your device.
+          </p>
+        </div>
+        <div class="hero__visual" aria-hidden="true">
+          <div class="hero__mockup">
+            <div class="mockup-bar">
+              <span class="mockup-dot"></span>
+              <span class="mockup-dot"></span>
+              <span class="mockup-dot"></span>
+            </div>
+            <div class="mockup-content">
+              <div class="mockup-tool-row">
+                <span class="mockup-icon"><i class="ph-fill ph-arrows-out-simple"></i></span>
+                <div class="mockup-lines">
+                  <div class="mockup-line mockup-line--long"></div>
+                  <div class="mockup-line mockup-line--short"></div>
+                </div>
+                <span class="mockup-badge">Done</span>
+              </div>
+              <div class="mockup-tool-row mockup-tool-row--active">
+                <span class="mockup-icon"><i class="ph-fill ph-file-arrow-down"></i></span>
+                <div class="mockup-lines">
+                  <div class="mockup-line mockup-line--med"></div>
+                  <div class="mockup-line mockup-line--short"></div>
+                </div>
+                <span class="mockup-badge mockup-badge--active">Active</span>
+              </div>
+              <div class="mockup-tool-row">
+                <span class="mockup-icon"><i class="ph-fill ph-crop"></i></span>
+                <div class="mockup-lines">
+                  <div class="mockup-line mockup-line--long"></div>
+                  <div class="mockup-line mockup-line--short"></div>
+                </div>
+                <span class="mockup-badge">Queue</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How It Works Section -->
+      <section class="how-it-works" id="how-it-works" aria-labelledby="hiw-title">
+        <div class="section-inner">
+          <h2 class="section-title" id="hiw-title">Simple as 1, 2, 3</h2>
+          <div class="hiw-steps">
+            <div class="hiw-step">
+              <div class="hiw-step__icon" aria-hidden="true"><i class="ph-fill ph-upload-simple"></i></div>
+              <div class="hiw-step__content">
+                <h3 class="hiw-step__title">Upload your image</h3>
+                <p class="hiw-step__desc">Drag and drop or click to select any image from your device.</p>
+              </div>
+            </div>
+            <div class="hiw-connector" aria-hidden="true"><i class="ph ph-arrow-right"></i></div>
+            <div class="hiw-step">
+              <div class="hiw-step__icon" aria-hidden="true"><i class="ph-fill ph-wrench"></i></div>
+              <div class="hiw-step__content">
+                <h3 class="hiw-step__title">Pick your tool</h3>
+                <p class="hiw-step__desc">Compress, resize, crop, convert and more — 8 tools at your fingertips.</p>
+              </div>
+            </div>
+            <div class="hiw-connector" aria-hidden="true"><i class="ph ph-arrow-right"></i></div>
+            <div class="hiw-step">
+              <div class="hiw-step__icon" aria-hidden="true"><i class="ph-fill ph-download-simple"></i></div>
+              <div class="hiw-step__content">
+                <h3 class="hiw-step__title">Download or save</h3>
+                <p class="hiw-step__desc">Get your file instantly or save it to the cloud for later.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features" id="features" aria-labelledby="features-title">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title" id="features-title">What Imageify Can Do</h2>
+            <p class="section-subtitle">8 powerful tools. All free. All in your browser.</p>
+          </div>
+          <div class="tools-grid" id="tools" role="list">
+
+            <article class="tool-card card" role="listitem" tabindex="0">
+              <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-file-zip"></i></div>
+              <h3 class="tool-card__name">Compressor</h3>
+              <p class="tool-card__tagline">Shrink Without Sacrifice</p>
+              <p class="tool-card__desc">Compress images up to 90% smaller with a live quality slider and before/after preview.</p>
+            </article>
+
+            <article class="tool-card card" role="listitem" tabindex="0">
+              <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-arrows-out-simple"></i></div>
+              <h3 class="tool-card__name">Resizer</h3>
+              <p class="tool-card__tagline">Your Size, Your Rules</p>
+              <p class="tool-card__desc">Resize by pixels or percentage. Choose presets like HD, 4K, Instagram, or Twitter.</p>
+            </article>
+
+            <article class="tool-card card" role="listitem" tabindex="0">
+              <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-swap"></i></div>
+              <h3 class="tool-card__name">Converter</h3>
+              <p class="tool-card__tagline">Format Freedom</p>
+              <p class="tool-card__desc">Switch between PNG, JPG, and WebP in seconds. No quality loss, no drama.</p>
+            </article>
+
+            <article class="tool-card card" role="listitem" tabindex="0">
+              <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-crop"></i></div>
+              <h3 class="tool-card__name">Cropper</h3>
+              <p class="tool-card__tagline">Cut It Perfectly</p>
+              <p class="tool-card__desc">Drag, lock aspect ratio, or crop free — your frame, your call.</p>
+            </article>
+
+            <article class="tool-card card" role="listitem" tabindex="0">
+              <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-drop"></i></div>
+              <h3 class="tool-card__name">Watermark</h3>
+              <p class="tool-card__tagline">Brand Every Image</p>
+              <p class="tool-card__desc">Add text overlays with full position and opacity control.</p>
+            </article>
+
+            <article class="tool-card card" role="listitem" tabindex="0">
+              <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-sun"></i></div>
+              <h3 class="tool-card__name">Brightness/Contrast</h3>
+              <p class="tool-card__tagline">Make It Pop</p>
+              <p class="tool-card__desc">Adjust brightness and contrast with live sliders and real-time preview.</p>
+            </article>
+
+            <article class="tool-card card" role="listitem" tabindex="0">
+              <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-code"></i></div>
+              <h3 class="tool-card__name">Base64</h3>
+              <p class="tool-card__tagline">Dev-Ready Images</p>
+              <p class="tool-card__desc">Convert any image to Base64 instantly. One click to copy.</p>
+            </article>
+
+            <article class="tool-card card" role="listitem" tabindex="0">
+              <div class="tool-card__icon tool-card__icon--ai" aria-hidden="true"><i class="ph-fill ph-magic-wand"></i></div>
+              <h3 class="tool-card__name">BG Remover</h3>
+              <p class="tool-card__tagline">AI That Earns Its Keep</p>
+              <p class="tool-card__desc">Remove backgrounds with AI. One-time 50MB model download, cached forever after.</p>
+              <span class="tool-card__tag badge">AI</span>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════
+           ABOUT SECTION
+      ═══════════════════════════════════════════ -->
+      <section class="about-section" id="about" aria-labelledby="about-title">
+        <div class="section-inner about-inner">
+          <div class="about-text">
+            <h2 class="section-title" id="about-title">The Person Behind the Pixels</h2>
+            <p class="section-subtitle about-sub">Not a faceless SaaS company. Just a developer who got tired of paying for basic image tools.</p>
+
+            <div class="about-body">
+              <p>My name is Mujahid Adamu Aliyu. I'm a self-taught web developer from Bauchi State, in northeastern Nigeria. I built Imageify because I kept running into the same problem: every decent image tool online wanted a subscription, an account, or at minimum, your email.</p>
+              <p>So I built the tool I actually wanted to use. Everything runs in your browser. Nothing is uploaded to a server. No ads. No upsells. No dark patterns. Just a clean, fast, private image toolkit — free for everyone.</p>
+              <p>If Imageify saves you time or money, that's enough for me. But if you want to say thanks, sharing it with someone who'd find it useful means the world.</p>
+            </div>
+
+            <div class="about-chips">
+              <span class="about-chip"><i class="ph ph-map-pin"></i> Bauchi State, Nigeria</span>
+              <span class="about-chip"><i class="ph ph-hammer"></i> Solo developer, MJ Web Technologies</span>
+            </div>
+          </div>
+
+          </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════
+           PRIVACY SECTION
+      ═══════════════════════════════════════════ -->
+      <section class="privacy-section" id="privacy" aria-labelledby="privacy-title">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title" id="privacy-title">Your Images Stay Yours</h2>
+            <p class="section-subtitle">No uploads, no storage, no tracking. We mean it.</p>
+          </div>
+
+          <div class="privacy-grid">
+            <div class="privacy-card">
+              <div class="privacy-card__icon"><i class="ph-fill ph-desktop"></i></div>
+              <h3 class="privacy-card__title">Runs in Your Browser</h3>
+              <p class="privacy-card__body">Every tool processes your image using your device's own computing power. Nothing leaves your machine unless you explicitly choose to save to the cloud.</p>
+            </div>
+            <div class="privacy-card">
+              <div class="privacy-card__icon"><i class="ph-fill ph-eye-slash"></i></div>
+              <h3 class="privacy-card__title">No Ads. No Tracking.</h3>
+              <p class="privacy-card__body">Imageify has no advertising, no analytics tracking, no third-party scripts watching what you do. Your usage data belongs to you.</p>
+            </div>
+            <div class="privacy-card">
+              <div class="privacy-card__icon"><i class="ph-fill ph-cloud-slash"></i></div>
+              <h3 class="privacy-card__title">Cloud Saves Are Optional</h3>
+              <p class="privacy-card__body">Creating an account is completely optional. If you sign up, cloud saves are encrypted and only accessible by you. Guest mode works with zero data stored server-side.</p>
+            </div>
+          </div>
+
+          <div class="trust-bar" aria-label="Privacy commitments">
+            <span class="trust-chip"><i class="ph-fill ph-check-circle"></i> Open source</span>
+            <span class="trust-chip"><i class="ph-fill ph-check-circle"></i> No cookies without consent</span>
+            <span class="trust-chip"><i class="ph-fill ph-check-circle"></i> No image retention</span>
+            <span class="trust-chip"><i class="ph-fill ph-check-circle"></i> GDPR-friendly</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════
+           SERVICES SECTION
+      ═══════════════════════════════════════════ -->
+      <section class="services-section" id="services" aria-labelledby="services-title">
+        <div class="section-inner services-inner">
+          <div class="section-header">
+            <h2 class="section-title" id="services-title">Three Tools Worth Calling Out</h2>
+            <p class="section-subtitle">These three do something most image tools charge for, or can't do at all.</p>
+          </div>
+          <div class="spot-grid">
+
+            <article class="spot-card">
+              <div class="spot-visual" aria-hidden="true">
+                <div class="sv-compress">
+                  <div class="sv-stat"><span class="sv-from">4.2 MB</span><i class="ph ph-arrow-right"></i><span class="sv-to">380 KB</span></div>
+                  <div class="sv-bar"><span class="sv-bar__fill"></span></div>
+                  <div class="sv-note"><i class="ph-fill ph-trend-down"></i> 91% smaller</div>
+                </div>
+              </div>
+              <div class="spot-body">
+                <span class="spot-eyebrow"><i class="ph-fill ph-file-zip"></i> Compressor</span>
+                <h3 class="spot-title">Shrink Without Sacrifice</h3>
+                <p class="spot-desc">Slide from 1 to 100 and watch the file size drop in real time. Compress hard, or nudge gently.</p>
+                <ul class="spot-points">
+                  <li><i class="ph-fill ph-check-circle"></i> Live before/after preview</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Up to 90% smaller</li>
+                  <li><i class="ph-fill ph-check-circle"></i> JPG and WebP output</li>
+                </ul>
+                <button type="button" class="btn-primary" onclick="openAuth('signup')">Try Compressor <i class="ph ph-arrow-right"></i></button>
+              </div>
+            </article>
+
+            <article class="spot-card">
+              <div class="spot-visual" aria-hidden="true">
+                <div class="sv-bg">
+                  <div class="sv-checker"><div class="sv-cutout"><i class="ph-fill ph-user"></i></div></div>
+                  <div class="sv-note"><i class="ph-fill ph-magic-wand"></i> Background removed</div>
+                </div>
+              </div>
+              <div class="spot-body">
+                <span class="spot-eyebrow"><i class="ph-fill ph-magic-wand"></i> BG Remover</span>
+                <h3 class="spot-title">AI That Earns Its Keep</h3>
+                <p class="spot-desc">The AI model runs inside your browser. It downloads once (about 50MB), then stays cached. No API, no fees, no uploads.</p>
+                <ul class="spot-points">
+                  <li><i class="ph-fill ph-check-circle"></i> Works offline after first load</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Cached forever</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Your photo never leaves your device</li>
+                </ul>
+                <button type="button" class="btn-primary" onclick="openAuth('signup')">Remove a Background <i class="ph ph-arrow-right"></i></button>
+              </div>
+            </article>
+
+            <article class="spot-card">
+              <div class="spot-visual" aria-hidden="true">
+                <div class="sv-convert">
+                  <div class="sv-formats">
+                    <span class="sv-fmt sv-fmt--on">PNG</span>
+                    <i class="ph ph-arrows-left-right"></i>
+                    <span class="sv-fmt">WebP</span>
+                    <i class="ph ph-arrows-left-right"></i>
+                    <span class="sv-fmt">JPG</span>
+                  </div>
+                  <div class="sv-note"><i class="ph-fill ph-check-circle"></i> No quality loss on lossless</div>
+                </div>
+              </div>
+              <div class="spot-body">
+                <span class="spot-eyebrow"><i class="ph-fill ph-swap"></i> Converter</span>
+                <h3 class="spot-title">Format Freedom</h3>
+                <p class="spot-desc">Turn heavy PNGs into fast WebP, or make email-safe JPGs. Drop an image in, get the format you need back.</p>
+                <ul class="spot-points">
+                  <li><i class="ph-fill ph-check-circle"></i> PNG, JPG and WebP</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Lossless option</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Instant download</li>
+                </ul>
+                <button type="button" class="btn-primary" onclick="openAuth('signup')">Convert an Image <i class="ph ph-arrow-right"></i></button>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════
+           FOOTER
+      ═══════════════════════════════════════════ -->
+      <footer class="site-footer" aria-label="Site footer">
+      <div class="footer-wrap">
+        <div class="footer-cta">
+          <div class="footer-cta__text">
+            <h2 class="footer-cta__title">Your images. Your device. Zero cost.</h2>
+            <p class="footer-cta__sub">Start editing in seconds. No subscription, no tricks.</p>
+          </div>
+          <div class="footer-cta__actions">
+            <button type="button" class="btn-light" onclick="openAuth('signup')">Create Free Account <i class="ph ph-arrow-right"></i></button>
+            <button type="button" class="btn-ghost-light" onclick="continueAsGuest()">Continue as Guest</button>
+          </div>
+        </div>
+
+        <div class="footer-main">
+          <div class="footer-brand">
+            <a href="#" class="footer-logo" aria-label="Imageify home">
+              <span class="footer-logo__icon"><i class="ph-fill ph-image-square"></i></span>
+              <span class="footer-logo__wordmark">Imageify</span>
+            </a>
+            <p class="footer-byline">A solo project by Mujahid Adamu Aliyu.</p>
+          </div>
+          <nav class="footer-nav" aria-label="Footer navigation">
+            <a href="#tools" class="footer-link"><i class="ph ph-wrench"></i> Tools</a>
+            <a href="#how-it-works" class="footer-link"><i class="ph ph-map-trifold"></i> How It Works</a>
+            <a href="#about" class="footer-link"><i class="ph ph-user"></i> About</a>
+            <a href="#privacy" class="footer-link"><i class="ph ph-shield-check"></i> Privacy</a>
+            <a href="mailto:hello@mjwebtech.dev" class="footer-link"><i class="ph ph-bug"></i> Report a Bug</a>
+          </nav>
+          <div class="footer-socials">
+            <a href="https://github.com/" class="footer-social" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-fill ph-github-logo"></i></a>
+            <a href="mailto:hello@mjwebtech.dev" class="footer-social" aria-label="Email"><i class="ph-fill ph-envelope-simple"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span class="footer-bottom__left">© 2026 Imageify · MJ Web Technologies</span>
+          <span class="footer-bottom__right">Made with <i class="ph-fill ph-heart"></i> in Bauchi, Nigeria</span>
+        </div>
+      </div>
+    </footer>
+
+    </main>
+  </div><!-- /desktop-layout -->
+
+
+  <!-- ═══════════════════════════════════════════
+       MOBILE LAYOUT (shown below 768px)
+  ═══════════════════════════════════════════ -->
+  <div class="mobile-layout">
+
+    <!-- Floating Island (Mobile) -->
+    <nav class="island island--mobile" id="islandMobile" aria-label="Main navigation">
+      <a href="#" class="island-logo" aria-label="Imageify home">
+        <span class="island-logo__icon"><i class="ph-fill ph-image-square"></i></span>
+        <span class="island-logo__wordmark">Imageify</span>
+      </a>
+      <button class="hamburger" id="hamburgerBtn" onclick="openDrawer()" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <i class="ph ph-list"></i>
+      </button>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()" aria-hidden="true"></div>
+    <aside class="drawer" id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true">
+      <div class="drawer__inner">
+        <div class="drawer__header">
+          <a href="#" class="island-logo">
+            <span class="island-logo__icon"><i class="ph-fill ph-image-square"></i></span>
+            <span class="island-logo__wordmark">Imageify</span>
+          </a>
+          <button class="drawer__close" onclick="closeDrawer()" aria-label="Close menu">
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+        <ul class="drawer__nav" role="list">
+          <li><a href="#mobile-about" class="drawer__link" onclick="closeDrawer()"><i class="ph ph-user"></i> About</a></li>
+          <li><a href="#mobile-features" class="drawer__link" onclick="closeDrawer()"><i class="ph ph-star"></i> Features</a></li>
+          <li><a href="#mobile-tools" class="drawer__link" onclick="closeDrawer()"><i class="ph ph-wrench"></i> Tools</a></li>
+          <li><a href="#mobile-how-it-works" class="drawer__link" onclick="closeDrawer()"><i class="ph ph-map-trifold"></i> How It Works</a></li>
+        </ul>
+        <div class="drawer__footer">
+          <p class="drawer__footer-text">Built with <i class="ph-fill ph-heart"></i> in Bauchi, Nigeria</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile Hero -->
+    <section class="hero hero--mobile" id="mobile-hero" aria-label="Hero">
+      <div class="hero__content hero__content--mobile">
+        <div class="hero__badge badge">
+          <i class="ph ph-lightning"></i> Free forever. No catch.
+        </div>
+        <h1 class="hero__headline">Edit. Convert.<br/>Create. <em>All Free.</em></h1>
+        <p class="hero__sub">
+          A free browser-based image toolkit — no installation, no server, no cost.
+        </p>
+        <div class="hero__cta hero__cta--mobile">
+          <button type="button" class="btn-primary btn--full" onclick="openAuth('signup')">Get Started Free <i class="ph ph-arrow-right"></i></button>
+          <p class="hero__signin">Already have an account? <button type="button" class="btn-link" onclick="openBottomSheet('signin')">Sign in</button></p>
+        </div>
+        <p class="hero__micro">
+          <i class="ph ph-shield-check"></i> Your images never leave your device.
+        </p>
+      </div>
+    </section>
+
+    <!-- Mobile How It Works -->
+    <section class="how-it-works" id="mobile-how-it-works" aria-labelledby="mobile-hiw-title">
+      <div class="section-inner">
+        <h2 class="section-title" id="mobile-hiw-title">Simple as 1, 2, 3</h2>
+        <div class="hiw-steps hiw-steps--mobile">
+          <div class="hiw-step">
+            <div class="hiw-step__icon" aria-hidden="true"><i class="ph-fill ph-upload-simple"></i></div>
+            <div class="hiw-step__content">
+              <h3 class="hiw-step__title">Upload your image</h3>
+              <p class="hiw-step__desc">Drag and drop or click to select.</p>
+            </div>
+          </div>
+          <div class="hiw-step">
+            <div class="hiw-step__icon" aria-hidden="true"><i class="ph-fill ph-wrench"></i></div>
+            <div class="hiw-step__content">
+              <h3 class="hiw-step__title">Pick your tool</h3>
+              <p class="hiw-step__desc">8 tools to choose from.</p>
+            </div>
+          </div>
+          <div class="hiw-step">
+            <div class="hiw-step__icon" aria-hidden="true"><i class="ph-fill ph-download-simple"></i></div>
+            <div class="hiw-step__content">
+              <h3 class="hiw-step__title">Download or save</h3>
+              <p class="hiw-step__desc">Get your file instantly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mobile Features -->
+    <section class="features" id="mobile-features" aria-labelledby="mobile-features-title">
+      <div class="section-inner">
+        <div class="section-header">
+          <h2 class="section-title" id="mobile-features-title">What Imageify Can Do</h2>
+          <p class="section-subtitle">8 powerful tools. All free. All in your browser.</p>
+        </div>
+        <div class="tools-grid tools-grid--mobile" id="mobile-tools" role="list">
+          <article class="tool-card card" role="listitem" tabindex="0">
+            <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-file-zip"></i></div>
+            <h3 class="tool-card__name">Compressor</h3>
+            <p class="tool-card__tagline">Shrink Without Sacrifice</p>
+            <p class="tool-card__desc">Compress images up to 90% smaller.</p>
+          </article>
+          <article class="tool-card card" role="listitem" tabindex="0">
+            <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-arrows-out-simple"></i></div>
+            <h3 class="tool-card__name">Resizer</h3>
+            <p class="tool-card__tagline">Your Size, Your Rules</p>
+            <p class="tool-card__desc">Resize by pixels or percentage.</p>
+          </article>
+          <article class="tool-card card" role="listitem" tabindex="0">
+            <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-swap"></i></div>
+            <h3 class="tool-card__name">Converter</h3>
+            <p class="tool-card__tagline">Format Freedom</p>
+            <p class="tool-card__desc">Switch between PNG, JPG, WebP.</p>
+          </article>
+          <article class="tool-card card" role="listitem" tabindex="0">
+            <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-crop"></i></div>
+            <h3 class="tool-card__name">Cropper</h3>
+            <p class="tool-card__tagline">Cut It Perfectly</p>
+            <p class="tool-card__desc">Drag, lock ratio, or crop free.</p>
+          </article>
+          <article class="tool-card card" role="listitem" tabindex="0">
+            <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-drop"></i></div>
+            <h3 class="tool-card__name">Watermark</h3>
+            <p class="tool-card__tagline">Brand Every Image</p>
+            <p class="tool-card__desc">Add text overlays anywhere.</p>
+          </article>
+          <article class="tool-card card" role="listitem" tabindex="0">
+            <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-sun"></i></div>
+            <h3 class="tool-card__name">Brightness/Contrast</h3>
+            <p class="tool-card__tagline">Make It Pop</p>
+            <p class="tool-card__desc">Live sliders, real-time preview.</p>
+          </article>
+          <article class="tool-card card" role="listitem" tabindex="0">
+            <div class="tool-card__icon" aria-hidden="true"><i class="ph-fill ph-code"></i></div>
+            <h3 class="tool-card__name">Base64</h3>
+            <p class="tool-card__tagline">Dev-Ready Images</p>
+            <p class="tool-card__desc">One click to copy Base64.</p>
+          </article>
+          <article class="tool-card card" role="listitem" tabindex="0">
+            <div class="tool-card__icon tool-card__icon--ai" aria-hidden="true"><i class="ph-fill ph-magic-wand"></i></div>
+            <h3 class="tool-card__name">BG Remover</h3>
+            <p class="tool-card__tagline">AI That Earns Its Keep</p>
+            <p class="tool-card__desc">Remove backgrounds with AI.</p>
+            <span class="tool-card__tag badge">AI</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         MOBILE ABOUT SECTION
+    ═══════════════════════════════════════════ -->
+    <section class="about-section" id="mobile-about" aria-labelledby="mobile-about-title">
+      <div class="section-inner about-inner about-inner--mobile">
+        <div class="about-text">
+          <h2 class="section-title" id="mobile-about-title">The Person Behind the Pixels</h2>
+          <p class="section-subtitle about-sub">Not a faceless SaaS company. Just a developer who got tired of paying for basic image tools.</p>
+          <div class="about-body">
+            <p>My name is Mujahid Adamu Aliyu. I'm a self-taught web developer from Bauchi State, in northeastern Nigeria. I built Imageify because I kept running into the same problem: every decent image tool online wanted a subscription, an account, or at minimum, your email.</p>
+            <p>So I built the tool I actually wanted to use. Everything runs in your browser. Nothing is uploaded to a server. No ads. No upsells. No dark patterns. Just a clean, fast, private image toolkit — free for everyone.</p>
+            <p>If Imageify saves you time or money, that's enough for me. But if you want to say thanks, sharing it with someone who'd find it useful means the world.</p>
+          </div>
+          <div class="about-chips">
+            <span class="about-chip"><i class="ph ph-map-pin"></i> Bauchi State, Nigeria</span>
+            <span class="about-chip"><i class="ph ph-hammer"></i> Solo developer, MJ Web Technologies</span>
+          </div>
+        </div>
+        </div>
+      </section>
+
+    <!-- ═══════════════════════════════════════════
+         MOBILE PRIVACY SECTION
+    ═══════════════════════════════════════════ -->
+    <section class="privacy-section" id="mobile-privacy" aria-labelledby="mobile-privacy-title">
+      <div class="section-inner">
+        <div class="section-header">
+          <h2 class="section-title" id="mobile-privacy-title">Your Images Stay Yours</h2>
+          <p class="section-subtitle">No uploads, no storage, no tracking. We mean it.</p>
+        </div>
+        <div class="privacy-grid privacy-grid--mobile">
+          <div class="privacy-card">
+            <div class="privacy-card__icon"><i class="ph-fill ph-desktop"></i></div>
+            <h3 class="privacy-card__title">Runs in Your Browser</h3>
+            <p class="privacy-card__body">Every tool processes your image using your device's own computing power. Nothing leaves your machine unless you explicitly choose to save to the cloud.</p>
+          </div>
+          <div class="privacy-card">
+            <div class="privacy-card__icon"><i class="ph-fill ph-eye-slash"></i></div>
+            <h3 class="privacy-card__title">No Ads. No Tracking.</h3>
+            <p class="privacy-card__body">Imageify has no advertising, no analytics tracking, no third-party scripts watching what you do. Your usage data belongs to you.</p>
+          </div>
+          <div class="privacy-card">
+            <div class="privacy-card__icon"><i class="ph-fill ph-cloud-slash"></i></div>
+            <h3 class="privacy-card__title">Cloud Saves Are Optional</h3>
+            <p class="privacy-card__body">Creating an account is completely optional. If you sign up, cloud saves are encrypted and only accessible by you. Guest mode works with zero data stored server-side.</p>
+          </div>
+        </div>
+        <div class="trust-bar trust-bar--mobile" aria-label="Privacy commitments">
+          <span class="trust-chip"><i class="ph-fill ph-check-circle"></i> Open source</span>
+          <span class="trust-chip"><i class="ph-fill ph-check-circle"></i> No cookies without consent</span>
+          <span class="trust-chip"><i class="ph-fill ph-check-circle"></i> No image retention</span>
+          <span class="trust-chip"><i class="ph-fill ph-check-circle"></i> GDPR-friendly</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         MOBILE SERVICES SECTION
+    ═══════════════════════════════════════════ -->
+    <section class="services-section" id="mobile-services" aria-labelledby="mobile-services-title">
+        <div class="section-inner services-inner">
+          <div class="section-header">
+            <h2 class="section-title" id="mobile-services-title">Three Tools Worth Calling Out</h2>
+            <p class="section-subtitle">These three do something most image tools charge for, or can't do at all.</p>
+          </div>
+          <div class="spot-grid">
+
+            <article class="spot-card">
+              <div class="spot-visual" aria-hidden="true">
+                <div class="sv-compress">
+                  <div class="sv-stat"><span class="sv-from">4.2 MB</span><i class="ph ph-arrow-right"></i><span class="sv-to">380 KB</span></div>
+                  <div class="sv-bar"><span class="sv-bar__fill"></span></div>
+                  <div class="sv-note"><i class="ph-fill ph-trend-down"></i> 91% smaller</div>
+                </div>
+              </div>
+              <div class="spot-body">
+                <span class="spot-eyebrow"><i class="ph-fill ph-file-zip"></i> Compressor</span>
+                <h3 class="spot-title">Shrink Without Sacrifice</h3>
+                <p class="spot-desc">Slide from 1 to 100 and watch the file size drop in real time. Compress hard, or nudge gently.</p>
+                <ul class="spot-points">
+                  <li><i class="ph-fill ph-check-circle"></i> Live before/after preview</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Up to 90% smaller</li>
+                  <li><i class="ph-fill ph-check-circle"></i> JPG and WebP output</li>
+                </ul>
+                <button type="button" class="btn-primary" onclick="openAuth('signup')">Try Compressor <i class="ph ph-arrow-right"></i></button>
+              </div>
+            </article>
+
+            <article class="spot-card">
+              <div class="spot-visual" aria-hidden="true">
+                <div class="sv-bg">
+                  <div class="sv-checker"><div class="sv-cutout"><i class="ph-fill ph-user"></i></div></div>
+                  <div class="sv-note"><i class="ph-fill ph-magic-wand"></i> Background removed</div>
+                </div>
+              </div>
+              <div class="spot-body">
+                <span class="spot-eyebrow"><i class="ph-fill ph-magic-wand"></i> BG Remover</span>
+                <h3 class="spot-title">AI That Earns Its Keep</h3>
+                <p class="spot-desc">The AI model runs inside your browser. It downloads once (about 50MB), then stays cached. No API, no fees, no uploads.</p>
+                <ul class="spot-points">
+                  <li><i class="ph-fill ph-check-circle"></i> Works offline after first load</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Cached forever</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Your photo never leaves your device</li>
+                </ul>
+                <button type="button" class="btn-primary" onclick="openAuth('signup')">Remove a Background <i class="ph ph-arrow-right"></i></button>
+              </div>
+            </article>
+
+            <article class="spot-card">
+              <div class="spot-visual" aria-hidden="true">
+                <div class="sv-convert">
+                  <div class="sv-formats">
+                    <span class="sv-fmt sv-fmt--on">PNG</span>
+                    <i class="ph ph-arrows-left-right"></i>
+                    <span class="sv-fmt">WebP</span>
+                    <i class="ph ph-arrows-left-right"></i>
+                    <span class="sv-fmt">JPG</span>
+                  </div>
+                  <div class="sv-note"><i class="ph-fill ph-check-circle"></i> No quality loss on lossless</div>
+                </div>
+              </div>
+              <div class="spot-body">
+                <span class="spot-eyebrow"><i class="ph-fill ph-swap"></i> Converter</span>
+                <h3 class="spot-title">Format Freedom</h3>
+                <p class="spot-desc">Turn heavy PNGs into fast WebP, or make email-safe JPGs. Drop an image in, get the format you need back.</p>
+                <ul class="spot-points">
+                  <li><i class="ph-fill ph-check-circle"></i> PNG, JPG and WebP</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Lossless option</li>
+                  <li><i class="ph-fill ph-check-circle"></i> Instant download</li>
+                </ul>
+                <button type="button" class="btn-primary" onclick="openAuth('signup')">Convert an Image <i class="ph ph-arrow-right"></i></button>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+    <!-- ═══════════════════════════════════════════
+         MOBILE FOOTER
+    ═══════════════════════════════════════════ -->
+    <footer class="site-footer" aria-label="Site footer">
+      <div class="footer-wrap">
+        <div class="footer-cta">
+          <div class="footer-cta__text">
+            <h2 class="footer-cta__title">Your images. Your device. Zero cost.</h2>
+            <p class="footer-cta__sub">Start editing in seconds. No subscription, no tricks.</p>
+          </div>
+          <div class="footer-cta__actions">
+            <button type="button" class="btn-light" onclick="openAuth('signup')">Create Free Account <i class="ph ph-arrow-right"></i></button>
+            <button type="button" class="btn-ghost-light" onclick="continueAsGuest()">Continue as Guest</button>
+          </div>
+        </div>
+
+        <div class="footer-main">
+          <div class="footer-brand">
+            <a href="#" class="footer-logo" aria-label="Imageify home">
+              <span class="footer-logo__icon"><i class="ph-fill ph-image-square"></i></span>
+              <span class="footer-logo__wordmark">Imageify</span>
+            </a>
+            <p class="footer-byline">A solo project by Mujahid Adamu Aliyu.</p>
+          </div>
+          <nav class="footer-nav" aria-label="Footer navigation">
+            <a href="#mobile-tools" class="footer-link"><i class="ph ph-wrench"></i> Tools</a>
+            <a href="#mobile-how-it-works" class="footer-link"><i class="ph ph-map-trifold"></i> How It Works</a>
+            <a href="#mobile-about" class="footer-link"><i class="ph ph-user"></i> About</a>
+            <a href="#mobile-privacy" class="footer-link"><i class="ph ph-shield-check"></i> Privacy</a>
+            <a href="mailto:hello@mjwebtech.dev" class="footer-link"><i class="ph ph-bug"></i> Report a Bug</a>
+          </nav>
+          <div class="footer-socials">
+            <a href="https://github.com/" class="footer-social" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-fill ph-github-logo"></i></a>
+            <a href="mailto:hello@mjwebtech.dev" class="footer-social" aria-label="Email"><i class="ph-fill ph-envelope-simple"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span class="footer-bottom__left">© 2026 Imageify · MJ Web Technologies</span>
+          <span class="footer-bottom__right">Made with <i class="ph-fill ph-heart"></i> in Bauchi, Nigeria</span>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /mobile-layout -->
+
+
+  <!-- ═══════════════════════════════════════════
+       MOBILE BOTTOM SHEET (shared)
+  ═══════════════════════════════════════════ -->
+  <div class="bottom-sheet-backdrop" id="bottomSheetBackdrop" onclick="closeBottomSheet()" aria-hidden="true"></div>
+  <div class="bottom-sheet" id="bottomSheet" role="dialog" aria-modal="true" aria-label="Sign in or create account" aria-hidden="true">
+    <div class="bottom-sheet__handle" aria-hidden="true"></div>
+    <div class="bottom-sheet__inner">
+
+      <!-- Tab Toggle -->
+      <div class="auth-tabs" role="tablist" aria-label="Authentication options">
+        <button class="auth-tab auth-tab--active" id="bs-tab-signin" role="tab" aria-selected="true" data-tab="signin" onclick="showBottomSheetState('signin')">Sign In</button>
+        <button class="auth-tab" id="bs-tab-signup" role="tab" aria-selected="false" data-tab="signup" onclick="showBottomSheetState('signup')">Sign Up</button>
+      </div>
+
+      <!-- BS Sign In -->
+      <div class="auth-form" id="bs-form-signin">
+        <div class="form-group">
+          <label class="form-label" for="bs-signin-email">Email</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="ph ph-envelope"></i></span>
+            <input type="email" id="bs-signin-email" class="input-field input-field--icon" placeholder="you@example.com" autocomplete="email" aria-required="true" />
+          </div>
+          <span class="field-error" id="bs-signin-email-error" role="alert"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="bs-signin-password">Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="ph ph-lock"></i></span>
+            <input type="password" id="bs-signin-password" class="input-field input-field--icon input-field--icon-right" placeholder="Your password" autocomplete="current-password" aria-required="true" />
+            <button type="button" class="input-toggle-visibility" onclick="togglePasswordVisibility('bs-signin-password', this)" aria-label="Toggle password visibility"><i class="ph ph-eye"></i></button>
+          </div>
+          <span class="field-error" id="bs-signin-password-error" role="alert"></span>
+        </div>
+        <div class="form-row form-row--right">
+          <button type="button" class="btn-link" onclick="showBottomSheetState('forgot')">Forgot Password?</button>
+        </div>
+        <button type="button" class="btn-primary btn--full" id="bs-signinBtn" onclick="handleSignIn('bs')">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-spinner spinner" aria-hidden="true"></span>
+        </button>
+        <div class="divider"><span>or</span></div>
+        <button type="button" class="btn-google btn--full" onclick="signInWithGoogle()">
+          <span class="google-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+              <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+              <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+            </svg>
+          </span>
+          Continue with Google
+        </button>
+        <p class="auth-switch">Don't have an account? <button type="button" class="btn-link" onclick="showBottomSheetState('signup')">Sign up</button></p>
+      </div>
+
+      <!-- BS Sign Up -->
+      <div class="auth-form auth-form--hidden" id="bs-form-signup">
+        <div class="form-group">
+          <label class="form-label" for="bs-signup-name">Full Name</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="ph ph-user"></i></span>
+            <input type="text" id="bs-signup-name" class="input-field input-field--icon" placeholder="Mujahid Aliyu" autocomplete="name" aria-required="true" />
+          </div>
+          <span class="field-error" id="bs-signup-name-error" role="alert"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="bs-signup-email">Email</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="ph ph-envelope"></i></span>
+            <input type="email" id="bs-signup-email" class="input-field input-field--icon" placeholder="you@example.com" autocomplete="email" aria-required="true" />
+          </div>
+          <span class="field-error" id="bs-signup-email-error" role="alert"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="bs-signup-password">Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="ph ph-lock"></i></span>
+            <input type="password" id="bs-signup-password" class="input-field input-field--icon input-field--icon-right" placeholder="At least 8 characters" autocomplete="new-password" aria-required="true" />
+            <button type="button" class="input-toggle-visibility" onclick="togglePasswordVisibility('bs-signup-password', this)" aria-label="Toggle password visibility"><i class="ph ph-eye"></i></button>
+          </div>
+          <span class="field-error" id="bs-signup-password-error" role="alert"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="bs-signup-confirm">Confirm Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="ph ph-lock-key"></i></span>
+            <input type="password" id="bs-signup-confirm" class="input-field input-field--icon input-field--icon-right" placeholder="Repeat your password" autocomplete="new-password" aria-required="true" />
+            <button type="button" class="input-toggle-visibility" onclick="togglePasswordVisibility('bs-signup-confirm', this)" aria-label="Toggle password visibility"><i class="ph ph-eye"></i></button>
+          </div>
+          <span class="field-error" id="bs-signup-confirm-error" role="alert"></span>
+        </div>
+        <button type="button" class="btn-primary btn--full" id="bs-signupBtn" onclick="handleSignUp('bs')">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-spinner spinner" aria-hidden="true"></span>
+        </button>
+        <div class="divider"><span>or</span></div>
+        <button type="button" class="btn-google btn--full" onclick="signInWithGoogle()">
+          <span class="google-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+              <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+              <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+            </svg>
+          </span>
+          Continue with Google
+        </button>
+        <p class="auth-switch">Already have an account? <button type="button" class="btn-link" onclick="showBottomSheetState('signin')">Sign in</button></p>
+      </div>
+
+      <!-- BS Forgot Password -->
+      <div class="auth-form auth-form--hidden" id="bs-form-forgot">
+        <button type="button" class="btn-back" onclick="showBottomSheetState('signin')">
+          <i class="ph ph-arrow-left"></i> Back to Sign In
+        </button>
+        <div id="bs-forgot-default">
+          <p class="auth-description">Enter your email and we'll send a reset link.</p>
+          <div class="form-group">
+            <label class="form-label" for="bs-forgot-email">Email</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i class="ph ph-envelope"></i></span>
+              <input type="email" id="bs-forgot-email" class="input-field input-field--icon" placeholder="you@example.com" autocomplete="email" aria-required="true" />
+            </div>
+            <span class="field-error" id="bs-forgot-email-error" role="alert"></span>
+          </div>
+          <button type="button" class="btn-primary btn--full" id="bs-resetBtn" onclick="handlePasswordReset('bs')">
+            <span class="btn-text">Send Reset Link</span>
+            <span class="btn-spinner spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div id="bs-forgot-success" class="forgot-success auth-form--hidden">
+          <div class="success-icon" aria-hidden="true"><i class="ph-fill ph-check-circle"></i></div>
+          <h3 class="success-title">Check your email!</h3>
+          <p class="success-body">We sent a reset link. Check your spam folder too.</p>
+          <button type="button" class="btn-secondary btn--full" onclick="showBottomSheetState('signin')">Back to Sign In</button>
+        </div>
+      </div>
+
+      <!-- Guest mode -->
+      <div class="guest-link">
+        <button type="button" class="btn-guest" onclick="continueAsGuest()">
+          Continue without account <i class="ph ph-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div><!-- /bottom-sheet -->
+
+
+  <!-- ═══════════════════════════════════════════
+       GLOBAL UI — Toast & Guest Modal
+  ═══════════════════════════════════════════ -->
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Guest Nudge Modal -->
+  <div class="modal-overlay" id="guestNudgeModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="guestModalTitle">
+    <div class="modal-card card">
+      <div class="modal-icon" aria-hidden="true"><i class="ph-fill ph-lock-key"></i></div>
+      <h2 class="modal-title" id="guestModalTitle">You've used your 3 free tries</h2>
+      <p class="modal-body">Create a free account to keep going — it only takes 30 seconds.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn-primary" onclick="closeGuestNudgeModal(); openAuth('signup');">Create Free Account</button>
+        <button type="button" class="btn-ghost" onclick="closeGuestNudgeModal()">Maybe Later</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- App JS -->
+  <script src="app.js"></script>
+</body>
+</html>
